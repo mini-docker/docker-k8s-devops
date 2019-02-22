@@ -56,6 +56,7 @@
 - gcc -static hello.c -o hello //编译c语言
 - vim hello.c,,, vim dockerfile
 - docker build -t xie19docker/hello-world .
+- 发布遇到问题 执行 `sudo su - root`, `systemctl start docker`
 -      (https://stackoverflow.com/questions/44678725/cannot-connect-to-the-docker-daemon-at-unix-var-run-docker-sock-is-the-docker) 执行 docker build 命令用于使用 Dockerfile 创建镜像。
 
 - docker history e157dcaa45bf(IMAGE ID) 查看docker分层
@@ -78,3 +79,44 @@
 
 - yum clean all
 - yum makecache
+
+
+## 什么是container
+- 通过Image创建（copy）
+- 在Image Layer之上建立一个container layer（可读写）
+- 类比面向对象： 类和实例
+- Image负责app的存储和分发，Container 负责运行app
+
+![](https://github.com/mini-docker/docker-k8s-devops/blob/master/img/about%20Docker%20Container.png)
+
+- `sudo docker container ls` 列举当前本地正在运行的容器
+- `sudo docker container ls -a`
+- `more hello-world/Dockerfile`
+
+- `docker -h` Management Commands: Commands:
+
+- `docker ps -a` == ` docker image ls`
+- `docker container ls -aq` 直接列举imageId
+- `docker rm $(docker container ls -aq)` 全部清除container
+
+- `docker rm $(docker container ls -f "status=exited" -q)`全部清除已退出的container
+
+### 基于某个image创建container 
+- docker container commit
+
+- docker image build --> docker build
+
+- 把一个container重新commit成一个image
+- docker run -it centos 交互运行centos（在centos上操作）
+- yum install vim
+- sudo docker container ls -a 找到 NAMES
+- sudo docker commit gallant_easley xie19docker/centos-vim
+
+#### 在对应虚拟机目录下
+- mkdir docker-centos-vim
+- cd docker-centos-vim/
+- vim Dockerfile
+- sudo docker build -t xie19docker/centos-vim-new .
+
+
+
